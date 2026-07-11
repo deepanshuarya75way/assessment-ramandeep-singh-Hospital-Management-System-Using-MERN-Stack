@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { config } from "dotenv";
-import bcrypt from "bcryptjs";
 
 // Load environment variables
 config({ path: "./Config/config.env" });
@@ -21,7 +20,7 @@ const createDefaultAdmin = async () => {
       process.exit(0);
     }
 
-    // Create default admin - let the User schema handle password hashing
+    // Create default admin - password is stored as plain text
     const admin = await User.create({
       firstName: "Super",
       lastName: "Admin",

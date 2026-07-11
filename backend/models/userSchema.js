@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import validator from "validator";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema({
@@ -73,14 +72,13 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) {
-      next();
-    }
-    this.password = await bcrypt.hash(this.password, 10);
+    // Password is stored as plain text (no hashing)
+    next();
   });
   
   userSchema.methods.comparePassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
+    // Plain text comparison (no hashing)
+    return enteredPassword === this.password;
   };
   
   userSchema.methods.generateJsonWebToken = function () {

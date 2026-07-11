@@ -222,7 +222,7 @@ export const getPatientDetails = async (req, res, next) => {
         // Send the patient details in the response
         res.status(200).json({
             success: true,
-            patient,
+            user: patient,
         });
     } catch (error) {
         // Handle errors

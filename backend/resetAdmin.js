@@ -21,7 +21,7 @@ const resetAdmin = async () => {
       console.log("No existing admin found.");
     }
 
-    // Create new admin - let the User schema handle password hashing
+    // Create new admin - password is stored as plain text
     const admin = await User.create({
       firstName: "Super",
       lastName: "Admin",

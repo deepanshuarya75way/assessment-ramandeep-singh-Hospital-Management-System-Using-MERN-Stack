@@ -1,79 +1,79 @@
 import express from "express";
 import { config } from "dotenv";
-import cors from "cors"; // Add this line to import the cors module
+import cors from "cors";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
-import { dbConnection } from "./database/dbConnection.js";
+
+// Routes
 import messageRouter from "./router/messageRouter.js";
-import {errorMiddleware} from "./middlewares/errorMiddleware.js";
 import userRouter from "./router/userRouter.js";
 import appointmentRouter from "./router/appointmentRouter.js";
 import departmentRouter from "./router/departmentRouter.js";
 import newsRouter from "./router/newsRouter.js";
 
+// Middlewares
+import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 
-
-const app = express();
+// Load environment variables
 config({ path: "./Config/config.env" });
 
+const app = express();
 
-
-// CORS configuration - must be before routes
+// ======= CORS CONFIGURATION =======
 app.use(
-    cors({
-        origin: [
-            process.env.FRONTEND_URL, 
-            process.env.DASHBOARD_URL,
-            "https://hospital-management-system-using-mern-5ans.onrender.com",
-            "https://hospital-management-system-using-mern-7sqr.onrender.com",
-            "http://localhost:3000",
-            "http://localhost:5173",
-            "http://localhost:5174"
-        ],
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        credentials: true,
-        allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
-        optionsSuccessStatus: 200
-    })
+  cors({
+    origin: [
+      process.env.FRONTEND_URL,
+      process.env.DASHBOARD_URL,
+      "https://hospital-management-system-using-mern-5ans.onrender.com",
+      "https://hospital-management-system-using-mern-7sqr.onrender.com",
+      "http://localhost:5175",
+      "http://localhost:5173",
+      "http://localhost:5174",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+    optionsSuccessStatus: 200,
+  })
 );
 
 // Handle preflight requests
-app.options('*', cors());
+app.options("*", cors());
 
-// Test route for default access
+// ======= MIDDLEWARES =======
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
+);
+
+// ======= ROUTES =======
 app.get("/", (req, res) => {
   res.send("Server is up and running 🚀");
 });
 
-app.use(cookieParser());
-
-app.use(express.json());
-
-app.use(express.urlencoded({ extended: true }));
-
-app.use(
-    fileUpload({
-        useTempFiles: true,
-        tempFileDir: "/tmp/",
-    })
-);
-
-
+// API routes
 app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/appointment", appointmentRouter);
 app.use("/api/v1/department", departmentRouter);
+app.use("/api/v1/news", newsRouter);
 
-// Additional routes without /api/v1 prefix for frontend compatibility
+// Duplicate routes for frontend compatibility
 app.use("/message", messageRouter);
 app.use("/user", userRouter);
 app.use("/department", departmentRouter);
-app.use("/api/v1/news", newsRouter);
 app.use("/news", newsRouter);
 
-
-dbConnection();
-
-
+// ======= ERROR HANDLER =======
 app.use(errorMiddleware);
+
+// ✅ NOTE: REMOVE DB CONNECTION FROM APP.JS
+// connectDB() must ONLY be called in server.js
+
 export default app;

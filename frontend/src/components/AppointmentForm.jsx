@@ -8,30 +8,35 @@ const AppointmentForm = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [nic, setNic] = useState("");
+  const [aadhar, setAadhar] = useState("");
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
   const [appointmentDate, setAppointmentDate] = useState("");
-  const [department, setDepartment] = useState("Pediatrics");
+  const [department, setDepartment] = useState("Cardiology");
   const [doctorFirstName, setDoctorFirstName] = useState("");
   const [doctorLastName, setDoctorLastName] = useState("");
   const [address, setAddress] = useState("");
   const [hasVisited, setHasVisited] = useState(false);
 
   const departmentsArray = [
+    "Cardiology",
     "Pediatrics",
     "Orthopedics",
-    "Cardiology",
+    "Dermatology",
     "Neurology",
+    "Gynecology",
     "Oncology",
+    "ENT",
+    "Gastroenterology",
+    "Psychiatry",
+    "Urology",
+    "Ophthalmology",
     "Radiology",
     "Physical Therapy",
-    "Dermatology",
-    "ENT",
   ];
 
   const [doctors, setDoctors] = useState([]);
-  
+
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
@@ -56,7 +61,7 @@ const AppointmentForm = () => {
           lastName,
           email,
           phone,
-          nic,
+          aadhar,
           dob,
           gender,
           appointment_date: appointmentDate,
@@ -70,24 +75,24 @@ const AppointmentForm = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-      
+
       toast.success(data.message);
       // Reset form
       setFirstName("");
       setLastName("");
       setEmail("");
       setPhone("");
-      setNic("");
+      setAadhar("");
       setDob("");
       setGender("");
       setAppointmentDate("");
-      setDepartment("Pediatrics");
+      setDepartment("Cardiology");
       setDoctorFirstName("");
       setDoctorLastName("");
       setHasVisited(false);
       setAddress("");
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Failed to book appointment. Please try again.");
     }
   };
 
@@ -127,9 +132,9 @@ const AppointmentForm = () => {
           <div>
             <input
               type="number"
-              placeholder="NIC"
-              value={nic}
-              onChange={(e) => setNic(e.target.value)}
+              placeholder="Aadhar Number (12 digits)"
+              value={aadhar}
+              onChange={(e) => setAadhar(e.target.value)}
             />
             <input
               type="date"

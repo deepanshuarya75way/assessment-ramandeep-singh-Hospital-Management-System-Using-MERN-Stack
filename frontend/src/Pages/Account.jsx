@@ -6,7 +6,7 @@ import API from "../api";
 
 const Account = () => {
   const { isAuthenticated, user, setUser } = useContext(Context);
-  
+
   // User profile states
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -15,7 +15,7 @@ const Account = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  
+
   // UI states
   const [isEditing, setIsEditing] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -40,14 +40,13 @@ const Account = () => {
     const fetchAppointments = async () => {
       try {
         setLoading(true);
-        const response = await API.get("/api/v1/appointment/getall");
-        // Filter appointments for current user
-        const userAppointments = response.data.appointments.filter(
-          appointment => appointment.patientId === user._id
-        );
-        setAppointments(userAppointments);
+        console.log("Fetching appointments for user:", user?._id);
+        const response = await API.get("/api/v1/appointment/myappointments");
+        console.log("Appointments response:", response.data);
+        setAppointments(response.data.appointments || []);
       } catch (error) {
         console.error("Error fetching appointments:", error);
+        console.error("Error response:", error.response?.data);
       } finally {
         setLoading(false);
       }
@@ -69,7 +68,7 @@ const Account = () => {
       };
 
       const response = await API.put(`/api/v1/user/update/${user._id}`, updateData);
-      
+
       toast.success("Profile updated successfully!");
       setUser(response.data.user);
       setIsEditing(false);
@@ -80,7 +79,7 @@ const Account = () => {
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
-    
+
     if (newPassword !== confirmPassword) {
       toast.error("New passwords don't match!");
       return;
@@ -96,7 +95,7 @@ const Account = () => {
         currentPassword,
         newPassword
       });
-      
+
       toast.success("Password changed successfully!");
       setCurrentPassword("");
       setNewPassword("");
@@ -135,9 +134,9 @@ const Account = () => {
         </h2>
 
         {/* Tab Navigation */}
-        <div style={{ 
-          display: "flex", 
-          justifyContent: "center", 
+        <div style={{
+          display: "flex",
+          justifyContent: "center",
           marginBottom: "30px",
           borderBottom: "2px solid #f0f0f0"
         }}>
@@ -174,11 +173,11 @@ const Account = () => {
 
         {/* Profile Tab */}
         {activeTab === "profile" && (
-          <div style={{ 
-            background: "white", 
-            padding: "30px", 
-            borderRadius: "10px", 
-            boxShadow: "0 4px 6px rgba(0,0,0,0.1)" 
+          <div style={{
+            background: "white",
+            padding: "30px",
+            borderRadius: "10px",
+            boxShadow: "0 4px 6px rgba(0,0,0,0.1)"
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
               <h3 style={{ color: "#271776", margin: 0 }}>Personal Information</h3>
@@ -352,7 +351,7 @@ const Account = () => {
                       {showCurrentPassword ? "👁️" : "👁️‍🗨️"}
                     </button>
                   </div>
-                  
+
                   <div style={{ position: "relative" }}>
                     <input
                       type={showNewPassword ? "text" : "password"}
@@ -377,7 +376,7 @@ const Account = () => {
                       {showNewPassword ? "👁️" : "👁️‍🗨️"}
                     </button>
                   </div>
-                  
+
                   <div style={{ position: "relative" }}>
                     <input
                       type={showConfirmPassword ? "text" : "password"}
@@ -403,7 +402,7 @@ const Account = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 <button
                   type="submit"
                   style={{
@@ -426,14 +425,14 @@ const Account = () => {
 
         {/* Appointments Tab */}
         {activeTab === "appointments" && (
-          <div style={{ 
-            background: "white", 
-            padding: "30px", 
-            borderRadius: "10px", 
-            boxShadow: "0 4px 6px rgba(0,0,0,0.1)" 
+          <div style={{
+            background: "white",
+            padding: "30px",
+            borderRadius: "10px",
+            boxShadow: "0 4px 6px rgba(0,0,0,0.1)"
           }}>
             <h3 style={{ color: "#271776", marginBottom: "20px" }}>My Appointments</h3>
-            
+
             {loading ? (
               <div style={{ textAlign: "center", padding: "20px" }}>
                 <p>Loading appointments...</p>
@@ -465,7 +464,7 @@ const Account = () => {
                           {appointment.department}
                         </small>
                       </div>
-                      
+
                       <div>
                         <strong style={{ color: "#271776" }}>Date & Time:</strong>
                         <p style={{ margin: "5px 0" }}>
@@ -475,10 +474,10 @@ const Account = () => {
                           {appointment.appointment_time}
                         </small>
                       </div>
-                      
+
                       <div>
                         <strong style={{ color: "#271776" }}>Status:</strong>
-                        <p style={{ 
+                        <p style={{
                           margin: "5px 0",
                           color: getStatusColor(appointment.status),
                           fontWeight: "bold",
@@ -488,7 +487,7 @@ const Account = () => {
                         </p>
                       </div>
                     </div>
-                    
+
                     {appointment.address && (
                       <div style={{ marginTop: "10px", paddingTop: "10px", borderTop: "1px solid #ddd" }}>
                         <strong style={{ color: "#271776" }}>Address:</strong>
@@ -509,3 +508,5 @@ const Account = () => {
 };
 
 export default Account;
+
+

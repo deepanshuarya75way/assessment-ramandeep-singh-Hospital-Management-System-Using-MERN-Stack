@@ -4,7 +4,7 @@ import { Context } from "../main";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import API from "../api";
 
-const Login = ({ name }) => { 
+const Login = ({ name }) => {
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
 
   const [email, setEmail] = useState("");
@@ -40,7 +40,7 @@ const Login = ({ name }) => {
 
   return (
     <div className="container form-component login-form">
-      <h2>Sign In to {name}</h2> {/* Updated title with hospital name */}
+      <h2>Sign In to {name}</h2>
       <p>Please Login To Continue</p>
       <p>
         Welcome to {name}, a state-of-the-art multi-specialist hospital committed to

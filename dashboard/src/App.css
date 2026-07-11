@@ -9,10 +9,12 @@
 }
 
 body {
-  background: #3939d9f2;
+  background: linear-gradient(135deg, #1a1a3e 0%, #2d2d6b 50%, #1e3a5f 100%);
   overflow-x: hidden;
   line-height: 1.6;
+  min-height: 100vh;
 }
+
 
 /* Typography */
 h1 {
@@ -98,28 +100,30 @@ p, span, a {
 /* Main Layout */
 .page {
   margin-left: 280px;
-  background: #f8fafc;
+  background: linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%);
   padding: 2rem;
   min-height: 100vh;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@media (max-width: 1208px) {
+@media (max-width: 768px) {
   .page {
-    margin-left: 0;
-    padding: 1rem;
+    margin-left: 220px;
+    padding: 1.5rem 1rem;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .page {
-    padding: 1rem 0.5rem;
+    margin-left: 0;
+    padding: 1rem 0.75rem;
   }
 }
+
 
 /* Form Components */
 .form-component {
-  padding: 2rem 0;
+  padding: 1rem 0;
   min-height: 100vh;
   background: #e5e5e5;
   display: flex;
@@ -128,46 +132,63 @@ p, span, a {
   align-items: center;
 }
 
+/* Login Form Logo */
+.form-component .logo {
+  max-width: 100px;
+  height: auto;
+  margin-bottom: 1rem;
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .form-component .logo {
+    max-width: 80px;
+  }
+}
+
 .form-title {
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
   color: #111;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   text-align: center;
 }
 
 .form-component h2 {
   color: #555;
-  letter-spacing: 2px;
-  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
   text-align: center;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
 }
 
 .form-component h4 {
   color: #555;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
+  font-size: clamp(0.85rem, 1.8vw, 1rem);
 }
 
 .form-component p {
-  max-width: 600px;
+  max-width: 500px;
   color: #666;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-align: center;
+  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
 }
 
 .form-component p:first-child {
-  font-size: clamp(1.1rem, 2.5vw, 1.75rem);
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
   font-weight: 700;
   color: #370080a3;
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .form-component form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
   width: 100%;
-  max-width: 550px;
+  max-width: 450px;
 }
 
 .add-admin-form form {
@@ -183,8 +204,8 @@ p, span, a {
 .form-component form select,
 .form-component form textarea {
   flex: 1;
-  font-size: clamp(0.875rem, 2vw, 1rem);
-  padding: 0.75rem 1rem;
+  font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+  padding: 0.65rem 0.85rem;
   border-radius: 8px;
   border: 2px solid #e1e1e1;
   transition: border-color 0.3s ease;
@@ -200,12 +221,12 @@ p, span, a {
 }
 
 .form-component button {
-  padding: 0.75rem 2rem;
+  padding: 0.65rem 1.5rem;
   color: #fff;
   font-weight: 700;
   border: none;
   border-radius: 8px;
-  font-size: clamp(0.875rem, 2vw, 1rem);
+  font-size: clamp(0.8rem, 1.8vw, 0.95rem);
   background: linear-gradient(135deg, #9083d5, #271776ca);
   cursor: pointer;
   transition: all 0.3s ease;
@@ -250,9 +271,23 @@ p, span, a {
 /* Sidebar Header */
 .sidebar-header {
   padding: 2rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(59, 130, 246, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(99, 102, 241, 0.1) 100%);
+  position: relative;
+  overflow: hidden;
 }
+
+.sidebar-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
 
 .hospital-logo {
   display: flex;
@@ -409,14 +444,11 @@ p, span, a {
   transform: translateX(0);
 }
 
-/* Mobile Menu Toggle */
+/* Mobile Menu Toggle - Hidden (always use sidebar) */
 .mobile-menu-toggle {
-  display: none;
-  position: fixed;
-  top: 1.5rem;
-  left: 1.5rem;
-  z-index: 1001;
+  display: none !important;
 }
+
 
 .hamburger-btn {
   display: flex;
@@ -461,47 +493,36 @@ p, span, a {
 /* Responsive Design */
 @media (max-width: 1208px) {
   .modern-sidebar {
-    left: -280px;
+    left: 0;
   }
   
   .modern-sidebar.show {
     left: 0;
   }
   
-  .mobile-menu-toggle {
-    display: flex;
-  }
+  /* mobile-menu-toggle stays hidden */
 }
+
 
 @media (max-width: 768px) {
   .modern-sidebar {
-    width: 260px;
-  }
-  
-  .mobile-menu-toggle {
-    top: 1rem;
-    left: 1rem;
-  }
-  
-  .hamburger-btn {
-    width: 45px;
-    height: 45px;
-    font-size: 1.1rem;
+    width: 220px;
   }
   
   .sidebar-header {
-    padding: 1.5rem 1rem;
+    padding: 1.2rem 0.8rem;
   }
   
   .hospital-info h3 {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
   
   .nav-item {
-    padding: 0.75rem 1rem;
-    margin: 0.25rem 0.5rem;
+    padding: 0.6rem 0.8rem;
+    margin: 0.2rem 0.4rem;
   }
 }
+
 
 @media (max-width: 480px) {
   .modern-sidebar {
@@ -532,10 +553,24 @@ p, span, a {
   display: flex;
   align-items: center;
   border-radius: 20px;
-  background: #b5b5ff;
-  padding: 1.5rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1.5rem 2rem;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+  position: relative;
+  overflow: hidden;
 }
+
+.dashboard .banner:first-child .firstBox::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -10%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
 
 .dashboard .banner:first-child .firstBox img {
   height: 100%;
@@ -559,16 +594,20 @@ p, span, a {
 .dashboard .banner:first-child .firstBox .content div p {
   margin-right: 0.5rem;
   font-size: clamp(1.25rem, 3vw, 2.125rem);
+  color: rgba(255,255,255,0.9);
 }
 
+
 .dashboard .banner:first-child .firstBox .content div h5 {
-  color: #ff008d;
+  color: #fff;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
 }
 
 .dashboard .banner:first-child .firstBox .content p {
   font-size: clamp(0.75rem, 1.5vw, 1rem);
-  color: #555;
+  color: rgba(255,255,255,0.85);
 }
+
 
 .dashboard .banner:first-child .secondBox,
 .dashboard .banner:first-child .thirdBox {
@@ -583,14 +622,31 @@ p, span, a {
 }
 
 .dashboard .banner:first-child .secondBox {
-  background: #3939d9f2;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   color: #fff;
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard .banner:first-child .secondBox::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 100px;
+  height: 100px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 50%;
 }
 
 .dashboard .banner:first-child .thirdBox {
-  color: #ff008d;
-  background: #fff;
+  color: #ef4444;
+  background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.1);
 }
+
 
 .dashboard .banner:first-child .secondBox p,
 .dashboard .banner:first-child .thirdBox p {
@@ -610,8 +666,10 @@ p, span, a {
   background: #fff;
   border-radius: 20px;
   padding: 2rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.06);
 }
+
 
 .dashboard .banner:last-child h5 {
   font-size: clamp(1.1rem, 2.5vw, 1.5rem);
@@ -629,15 +687,26 @@ p, span, a {
 
 .dashboard .banner table th,
 .dashboard .banner table td {
-  padding: 0.75rem;
+  padding: 1rem 0.75rem;
   text-align: left;
-  border-bottom: 1px solid #e1e1e1;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.2s ease;
+}
+
+.dashboard .banner table tbody tr:hover td {
+  background: #f8faff;
 }
 
 .dashboard .banner table th {
-  background: #f8f9fa;
+  background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
   font-weight: 700;
+  color: #4a5568;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #e8ecff;
 }
+
 
 .dashboard .banner table select {
   font-size: clamp(0.75rem, 1.5vw, 1.25rem);
@@ -682,6 +751,57 @@ p, span, a {
 .dashboard .banner table .value-rejected {
   color: #dc2626;
   font-weight: 600;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-badge.pending {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fbbf24;
+}
+
+.status-badge.accepted {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #10b981;
+}
+
+.status-badge.rejected {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #f87171;
+}
+
+/* Status Select Dropdown */
+.status-select {
+  padding: 0.5rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.status-select:hover {
+  border-color: #9083d5;
+}
+
+.status-select:focus {
+  outline: none;
+  border-color: #9083d5;
+  box-shadow: 0 0 0 3px rgba(144, 131, 213, 0.1);
 }
 
 @media (max-width: 1020px) {
@@ -1635,3 +1755,35 @@ input[type="time"]:before {
     padding: 20px;
   }
 }
+
+/* =============================================
+   PREMIUM TOAST NOTIFICATIONS (Dashboard)
+   ============================================= */
+.Toastify__toast-container {
+  z-index: 99999 !important;
+}
+
+.Toastify__toast--success {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: white !important;
+  font-weight: 600;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35) !important;
+}
+
+.Toastify__toast--error {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  color: white !important;
+  font-weight: 600;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.35) !important;
+}
+
+.Toastify__toast-body {
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Smooth page scroll */
+html {
+  scroll-behavior: smooth;
+}

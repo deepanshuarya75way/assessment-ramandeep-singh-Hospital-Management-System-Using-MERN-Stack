@@ -16,9 +16,9 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post( // ✅ switched from axios.post → API.post
-        "/user/login",
-        { email, password, role: "Admin" },
+      const res = await API.post(
+        "/api/v1/user/login",
+        { email, password, role: "Doctor" },
         {
           headers: { "Content-Type": "application/json" },
         }
@@ -45,8 +45,8 @@ const Login = () => {
   return (
     <section className="container form-component">
       <img src="/logo.png" alt="logo" className="logo" />
-      <h1 className="form-title">WELCOME TO SHAAN HOSPITAL</h1>
-      <p>Admin Dashboard - Only Authorized Personnel Are Allowed To Access These Resources!</p>
+      <h1 className="form-title">SHAAN HOSPITAL</h1>
+      <p>Doctor Portal - Access Your Appointments</p>
       <form onSubmit={handleLogin}>
         <input
           type="text"

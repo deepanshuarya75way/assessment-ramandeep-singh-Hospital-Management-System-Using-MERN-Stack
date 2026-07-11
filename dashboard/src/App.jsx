@@ -26,7 +26,7 @@ const App = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await API.get("/user/admin/me");
+        const response = await API.get("/api/v1/user/admin/me");
         setIsAuthenticated(true);
         setAdmin(response.data.user);
       } catch (error) {
@@ -43,31 +43,10 @@ const App = () => {
       <Routes>
         <Route path="/" element={isAuthenticated ? <Dashboard /> : <Login />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/departments" element={<DepartmentManagement />} />
         <Route path="/news" element={<NewsManagement />} />
-        <Route
-          path="/doctor/addnew"
-          element={isAuthenticated ? <AddNewDoctor /> : <Login />}
-        />
-        <Route
-          path="/admin/addnew"
-          element={isAuthenticated ? <AddNewAdmin /> : <Login />}
-        />
         <Route
           path="/messages"
           element={isAuthenticated ? <Messages /> : <Login />}
-        />
-        <Route
-          path="/doctors"
-          element={isAuthenticated ? <Doctors /> : <Login />}
-        />
-        <Route
-          path="/patients"
-          element={isAuthenticated ? <PatientManagement /> : <Login />}
-        />
-        <Route
-          path="/departments"
-          element={isAuthenticated ? <DepartmentManagement /> : <Login />}
         />
       </Routes>
       <ToastContainer position="top-center" />

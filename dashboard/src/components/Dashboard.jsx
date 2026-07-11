@@ -21,17 +21,18 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const { data } = await API.get("/appointment/getall"); // ✅ no need withCredentials
+        const { data } = await API.get("/api/v1/appointment/getall");
         setAppointments(data.appointments);
       } catch (error) {
         console.error("Error fetching appointments:", error);
+        toast.error(error.response?.data?.message || "Failed to fetch appointments");
         setAppointments([]);
       }
     };
 
     const fetchStats = async () => {
       try {
-        const { data } = await API.get("/user/stats"); // ✅ use API instance
+        const { data } = await API.get("/api/v1/user/stats");
         setStats(data.stats);
       } catch (error) {
         console.error("Error fetching stats:", error);
@@ -45,7 +46,7 @@ const Dashboard = () => {
   const handleUpdateStatus = async (appointmentId, status) => {
     try {
       const { data } = await API.put(
-        `/appointment/update/${appointmentId}`,
+        `/api/v1/appointment/update/${appointmentId}`,
         { status }
       );
       setAppointments((prevAppointments) =>
@@ -55,7 +56,7 @@ const Dashboard = () => {
             : appointment
         )
       );
-      toast.success(data.message);
+      toast.success("Appointment status updated successfully!");
     } catch (error) {
       toast.error(error.response?.data?.message || "Error updating status");
     }
@@ -68,90 +69,44 @@ const Dashboard = () => {
 
   return (
     <section className="dashboard page">
+      {/* Welcome Banner */}
       <div className="banner">
         <div className="firstBox">
           <img src="/doc.png" alt="docImg" />
           <div className="content">
             <div>
-              <p>Hello,</p>
+              <p>Welcome,</p>
               <h5>
-                {admin && `${admin.firstName} ${admin.lastName}`}
+                Dr. {admin && `${admin.firstName} ${admin.lastName}`}
               </h5>
             </div>
             <p>
-              Welcome to Shaan Hospital's administrative dashboard. Monitor appointments,
-              manage patient records, and oversee hospital operations efficiently.
+              Manage your appointments efficiently. Review patient details, 
+              accept or reject appointments with ease.
             </p>
           </div>
         </div>
         <div className="secondBox">
-          <p>Total Appointments</p>
+          <p>My Appointments</p>
           <h3>{appointments.length}</h3>
         </div>
         <div className="thirdBox">
-          <p>Registered Doctors</p>
-          <h3>{stats.totalDoctors}</h3>
+          <p>Pending</p>
+          <h3>{appointments.filter(a => a.status === "Pending").length}</h3>
         </div>
       </div>
 
-      {/* Patient Statistics Section */}
-      <div className="stats-container">
-        <div className="stat-card">
-          <div className="stat-icon">
-            <FaUserInjured style={{ color: "#e74c3c" }} />
-          </div>
-          <div className="stat-info">
-            <h3>{stats.totalPatients}</h3>
-            <p>Total Patients</p>
-            <span className="recent-count">
-              +{stats.recentPatients} this week
-            </span>
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-icon">
-            <FaUserMd style={{ color: "#3498db" }} />
-          </div>
-          <div className="stat-info">
-            <h3>{stats.totalDoctors}</h3>
-            <p>Total Doctors</p>
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-icon">
-            <FaUserShield style={{ color: "#9b59b6" }} />
-          </div>
-          <div className="stat-info">
-            <h3>{stats.totalAdmins}</h3>
-            <p>Total Admins</p>
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-icon">
-            <FaUsers style={{ color: "#27ae60" }} />
-          </div>
-          <div className="stat-info">
-            <h3>{stats.recentLogins}</h3>
-            <p>Recent Patient Logins</p>
-            <span className="recent-count">Last 24 hours</span>
-          </div>
-        </div>
-      </div>
-
+      {/* Appointments Table */}
       <div className="banner">
-        <h5>Appointments</h5>
+        <h5>My Appointments</h5>
         <table>
           <thead>
             <tr>
-              <th>Patient</th>
+              <th>Patient Name</th>
               <th>Date</th>
-              <th>Doctor</th>
               <th>Department</th>
               <th>Status</th>
-              <th>Visited</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -161,48 +116,37 @@ const Dashboard = () => {
                   <td>
                     {`${appointment.firstName} ${appointment.lastName}`}
                   </td>
-                  <td>{appointment.appointment_date.substring(0, 16)}</td>
-                  <td>
-                    {`${appointment.doctor.firstName} ${appointment.doctor.lastName}`}
-                  </td>
+                  <td>{new Date(appointment.appointment_date).toLocaleString('en-US', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}</td>
                   <td>{appointment.department}</td>
                   <td>
+                    <span className={`status-badge ${appointment.status.toLowerCase()}`}>
+                      {appointment.status}
+                    </span>
+                  </td>
+                  <td>
                     <select
-                      className={
-                        appointment.status === "Pending"
-                          ? "value-pending"
-                          : appointment.status === "Accepted"
-                          ? "value-accepted"
-                          : "value-rejected"
-                      }
+                      className="status-select"
                       value={appointment.status}
                       onChange={(e) =>
                         handleUpdateStatus(appointment._id, e.target.value)
                       }
                     >
-                      <option value="Pending" className="value-pending">
-                        Pending
-                      </option>
-                      <option value="Accepted" className="value-accepted">
-                        Accepted
-                      </option>
-                      <option value="Rejected" className="value-rejected">
-                        Rejected
-                      </option>
+                      <option value="Pending">Pending</option>
+                      <option value="Accepted">Accept</option>
+                      <option value="Rejected">Reject</option>
                     </select>
-                  </td>
-                  <td>
-                    {appointment.hasVisited === true ? (
-                      <GoCheckCircleFill className="green" />
-                    ) : (
-                      <AiFillCloseCircle className="red" />
-                    )}
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="6">No Appointments Found!</td>
+                <td colSpan="5" style={{textAlign: "center", padding: "2rem"}}>No Appointments Found!</td>
               </tr>
             )}
           </tbody>

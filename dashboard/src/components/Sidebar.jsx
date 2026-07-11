@@ -16,11 +16,11 @@ const Sidebar = () => {
   const [show, setShow] = useState(false);
   const location = useLocation();
 
-  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  const { isAuthenticated, setIsAuthenticated, admin } = useContext(Context);
 
   const handleLogout = async () => {
     try {
-      const res = await API.get("/user/admin/logout");
+      const res = await API.get("/api/v1/user/admin/logout");
       toast.success(res.data.message);
       setIsAuthenticated(false);
     } catch (err) {
@@ -30,6 +30,7 @@ const Sidebar = () => {
 
   const navigateTo = useNavigate();
 
+  // Simple navigation for doctors
   const navigationItems = [
     {
       id: 1,
@@ -40,52 +41,17 @@ const Sidebar = () => {
     },
     {
       id: 2,
-      label: "Doctors",
-      icon: <FaUserDoctor />,
-      path: "/doctors",
-      onClick: () => { navigateTo("/doctors"); setShow(false); }
-    },
-    {
-      id: 3,
-      label: "Patients",
-      icon: <FaUserInjured />,
-      path: "/patients",
-      onClick: () => { navigateTo("/patients"); setShow(false); }
-    },
-    {
-      id: 4,
-      label: "Departments",
-      icon: <FaHospital />,
-      path: "/departments",
-      onClick: () => { navigateTo("/departments"); setShow(false); }
-    },
-    {
-      id: 5,
-      label: "News",
-      icon: <FaNewspaper />,
-      path: "/news",
-      onClick: () => { navigateTo("/news"); setShow(false); }
-    },
-    {
-      id: 6,
-      label: "Add Doctor",
-      icon: <FaUserPlus />,
-      path: "/doctor/addnew",
-      onClick: () => { navigateTo("/doctor/addnew"); setShow(false); }
-    },
-    {
-      id: 7,
-      label: "Add Admin",
-      icon: <MdAddModerator />,
-      path: "/admin/addnew",
-      onClick: () => { navigateTo("/admin/addnew"); setShow(false); }
-    },
-    {
-      id: 8,
       label: "Messages",
       icon: <AiFillMessage />,
       path: "/messages",
       onClick: () => { navigateTo("/messages"); setShow(false); }
+    },
+    {
+      id: 3,
+      label: "News",
+      icon: <FaNewspaper />,
+      path: "/news",
+      onClick: () => { navigateTo("/news"); setShow(false); }
     }
   ];
 
@@ -105,7 +71,7 @@ const Sidebar = () => {
             <img src="/logo.png" alt="Shaan Hospital" className="sidebar-logo-img" />
             <div className="hospital-info">
               <h3>Shaan Hospital</h3>
-              <p>Admin Dashboard</p>
+              <p>Doctor Portal</p>
             </div>
           </div>
         </div>
@@ -113,23 +79,8 @@ const Sidebar = () => {
         {/* Navigation Links */}
         <div className="sidebar-nav">
           <div className="nav-section">
-            <span className="nav-section-title">Main</span>
-            {navigationItems.slice(0, 5).map((item) => (
-              <div 
-                key={item.id}
-                className={`nav-item ${isActiveRoute(item.path) ? 'active' : ''}`}
-                onClick={item.onClick}
-              >
-                <div className="nav-icon">{item.icon}</div>
-                <span className="nav-label">{item.label}</span>
-                {isActiveRoute(item.path) && <div className="active-indicator"></div>}
-              </div>
-            ))}
-          </div>
-
-          <div className="nav-section">
-            <span className="nav-section-title">Management</span>
-            {navigationItems.slice(5).map((item) => (
+            <span className="nav-section-title">Menu</span>
+            {navigationItems.map((item) => (
               <div 
                 key={item.id}
                 className={`nav-item ${isActiveRoute(item.path) ? 'active' : ''}`}
