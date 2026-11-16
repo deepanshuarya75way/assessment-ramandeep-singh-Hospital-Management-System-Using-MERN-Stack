@@ -118,8 +118,28 @@ const Account = () => {
       case 'pending': return '#f39c12';
       case 'accepted': return '#27ae60';
       case 'rejected': return '#e74c3c';
+      case 'cancelled': return '#e74c3c' 
       default: return '#95a5a6';
     }
+  };
+
+  const handleCancelAppointment = async (appointmentId) =>{
+    if(!window.confirm("are u sure")){
+      return;
+    }
+  try{
+    const response = await API.put(`/api/v1/appointment/cancel/${appointmentId}`);
+
+    toast.success(response.data.message || "Appointment Cancelled");
+
+
+        setAppointments((prev)  =>
+        prev.map((item)=>
+        item.id === appointmentId ? {...item, status: "Cancelled"} : item
+        ));
+  }catch(error){
+    toast.error(error.response?.data?.message || "Failed to concel");
+  }
   };
 
   if (!isAuthenticated) {
@@ -474,7 +494,7 @@ const Account = () => {
                           {appointment.appointment_time}
                         </small>
                       </div>
-
+                    
                       <div>
                         <strong style={{ color: "#271776" }}>Status:</strong>
                         <p style={{
@@ -495,6 +515,26 @@ const Account = () => {
                           {appointment.address}
                         </p>
                       </div>
+                    )}
+
+                    {appointment.status === "Pending" && (
+
+                      <div  style = {{marginTop: "15px", textAlign: "right"}}>
+                        <button
+                            onClick= {() => handleCancelAppointment(appointment._id)}                      
+                            style={{
+      marginTop: "15px",
+      padding: "10px 20px",
+      background: "#e74c3c",
+      color: "white",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+      fontWeight: "bold"}}
+                        >
+                          Cancel Appointment
+                        </button>
+                    </div>
                     )}
                   </div>
                 ))}

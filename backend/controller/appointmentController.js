@@ -247,3 +247,37 @@ export const deleteAppointment = catchAsyncErrors(async (req, res) => {
   await Appointment.findByIdAndDelete(req.params.id);
   res.status(200).json({ success: true });
 });
+
+export const cancelAppointment= catchAsyncErrors(async (req,res,next) => {
+   const{id} = req.params;
+   const appointment = await Appointment.findById(id);
+
+   if (!appointment) {
+      return next(
+        new ErrorHandler("Appointment not found" , 404)
+      );
+    }
+
+
+    if(appointment.patientId.toString()!== req.user._id.toString()){
+      return next(
+        new ErrorHandler(" No authrity",403)
+      )
+    }
+
+    if(appointment.status !== "Pending"){
+      return next(
+                  new ErrorHandler(`Cannot cancel an apppointment that is already ${appointment.status}!`,400)
+      );
+    }
+
+
+    await Appointment.findByIdAndUpdate(id,{status: "Cancelled"}, {runValidators:false});
+
+    res.status(200).json({
+      success: true,
+      message: "Appointment Cancelled successfully",
+      appointment,
+    });
+
+  });

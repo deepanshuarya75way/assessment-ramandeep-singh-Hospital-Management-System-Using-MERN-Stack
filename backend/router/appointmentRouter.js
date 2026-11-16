@@ -24,6 +24,7 @@
 
 import express from "express";
 import {
+  cancelAppointment,
   deleteAppointment,
   getAllAppointments,
   getMyAppointments,
@@ -42,5 +43,6 @@ router.get("/myappointments", isPatientAuthenticated, getMyAppointments);
 router.get("/getall", isAdminAuthenticated, getAllAppointments);
 router.put("/update/:id", isAdminAuthenticated, updateAppointmentStatus);
 router.delete("/delete/:id", isAdminAuthenticated, deleteAppointment);
+router.put("/cancel/:id", isPatientAuthenticated, cancelAppointment);
 
 export default router;
